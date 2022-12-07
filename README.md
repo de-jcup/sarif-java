@@ -17,15 +17,22 @@ github.com/de-jcup/sarif-java
                       /src/test/java
                 /src/main/resources
                         sarif.json
-	 /sarif-3.0
+	 /sarif-3.0-generator
 	    build.gradle
 	    /gen
 ```
 
 ### Versioning
 
-#### libary name
-${sarif_version}-${ourMajor}.${ourMinor}	
+#### Libary version
+We will have the library version containing the sarif version and the our semantic version contained inside:
+
+`${sarif_version}-${ourMajor}.${ourMinor}`
+
+So as an example: For sarif 2.1.0 in the first release of our library we will have library name: `2.1.0-1.0`.
+If there are minor changes for this library necessary it will be `2.1.0-1.1`.
+If there are major (breaking) changes for the next library, it will be `2.1.0-2.0`. 
+
 #### Package names
 The package names do contain the sarif version inside so easy to differentiate
     
