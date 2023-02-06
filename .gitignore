@@ -1,23 +1,43 @@
-# Compiled class file
+# customization files
+build-custom.gradle
+build-custom-buildscript.gradle
+build-custom-allprojects.gradle
+
+# eclipse parts
+bin/
+src-gen/
+.metadata
+.lck
+.classpath
+.project
+.settings/
+
+# intellij parts
+*.iml
+.idea/
+*.ipr
+*.iws
+
+# vscode parts
+.vscode/
+
+# gradle parts
+.gradle/
+
+# vi parts
+.*.swp
+
+# Build artifacts at all
 *.class
-
-# Log file
-*.log
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+build/
 *.jar
-*.war
-*.nar
-*.ear
+*.log
+*.bak
 *.zip
-*.tar.gz
-*.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+# Asciidoctor
+.asciidoctorconfig.adoc
+
+# Gen directories
+gen/
+
