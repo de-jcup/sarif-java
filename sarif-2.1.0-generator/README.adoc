@@ -1,0 +1,3 @@
+=== Information
+This subprojects uses the following schema to generate a java SARIF library:
+https://github.com/oasis-tcs/sarif-spec/blob/main/Schemata/sarif-schema-2.1.0.json

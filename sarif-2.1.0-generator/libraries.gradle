@@ -1,0 +1,8 @@
+ext {
+   
+   library = [
+     jackson_annotations:                   'com.fasterxml.jackson.core:jackson-annotations:2.13.4',
+     jackson_databind:                      'com.fasterxml.jackson.core:jackson-databind:2.13.4.2'
+   ]
+   
+ }
