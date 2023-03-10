@@ -1,0 +1,89 @@
+// Use the java plugin 
+apply plugin: 'java'
+apply plugin: 'signing'
+apply plugin: 'maven-publish'
+
+buildscript {
+  apply from: "../../libraries.gradle"
+}
+
+group = "de.jcup.sarif.java"
+version = System.getenv('SARIF_GENERATED_LIB_RELEASE_VERSION')
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation library.jackson_databind
+}
+
+java {
+    sourceCompatibility = '$GEN_LIBRARY_JAVA_VERSION'
+    targetCompatibility = '$GEN_LIBRARY_JAVA_VERSION'
+}
+
+
+java {
+//    withJavadocJar()
+    withSourcesJar()
+}
+
+///**
+// * Define artifacts
+// */
+//artifacts {
+//    archives sourcesJar
+////    archives javadocJar
+//}
+
+//signing {
+//    sign configurations.archives
+//}
+
+
+
+publishing {
+
+   repositories {
+    maven {
+      name = "OSSRH"
+      url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+      credentials {
+        username = System.getenv("MAVEN_USERNAME")
+        password = System.getenv("MAVEN_PASSWORD")
+      }
+    }
+  }
+
+  publications {
+        mavenJava(MavenPublication) {
+            pom {
+                name = 'sarif-java'
+                description = 'A java library to read and write SARIF reports.'
+                url = 'https://github.com/de-jcup/sarif-java'
+                
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://spdx.org/licenses/MIT.html'
+                    }
+                }
+                
+                developers {
+                    developer {
+                        id = 'de-jcup'
+                        name = 'Albert Tregnaghi'
+                        email = 'albert.tregnaghi@gmail.com'
+                    }
+                }
+                scm {
+                      connection = 'scm:git:https://github.com/de-jcup/sarif-java.git'
+                      developerConnection = 'https://github.com/de-jcup/sarif-java.git'
+                      url = 'https://github.com/de-jcup/sarif-java'
+                }
+            }
+        }
+    }
+}
+   

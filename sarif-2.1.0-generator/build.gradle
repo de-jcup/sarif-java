@@ -5,6 +5,9 @@ apply plugin: 'java'
 
 apply plugin: 'jsonschema2pojo'
 
+ext.sarif_version_with_underscores=System.getenv("SARIF_VERSION_WITH_UNDERSCORES")
+ext.sarif_gen_folder_name=System.getenv("SARIF_GEN_FOLDER_NAME")
+
 buildscript {
 
   apply from: "libraries.gradle"
@@ -36,11 +39,11 @@ jsonSchema2Pojo {
 
   // Target directory for generated Java source files. The plugin will add this directory to the
   // java source set so the compiler will find and compile the newly generated source files.
-  targetDirectory = file("gen/sarif-210/src/main/java")
+  targetDirectory = file("${sarif_gen_folder_name}/src/main/java")
 
   // Package name used for generated Java classes (for types where a fully qualified name has not
   // been supplied in the schema using the 'javaType' property).
-  targetPackage = 'de.jcup.sarif.sarif210.model'
+  targetPackage = "de.jcup.sarif_${sarif_version_with_underscores}.model"
   
   // Whether to generate builder-style methods of the form withXxx(value) (that return this),
   // alongside the standard, void-return setters.
@@ -99,4 +102,5 @@ jsonSchema2Pojo {
   
   // What java source version to target with generated output (1.6, 1.8, 9, 11, etc)
   targetVersion = System.getenv("GEN_LIBRARY_JAVA_VERSION")
+  
 }

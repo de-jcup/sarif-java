@@ -1,6 +1,14 @@
 #!/bin/bash
 
 # SPDX-License-Identifier: MIT
+export SARIF_VERSION="2.1.0"
+# replace all . with _ :
+export SARIF_VERSION_WITH_UNDERSCORES="${SARIF_VERSION//./_}"
+
+echo "SARIF_VERSION_WITH_UNDERSCORES=$SARIF_VERSION_WITH_UNDERSCORES"
+
+export SARIF_FOLDER_NAME="sarif-$SARIF_VERSION"
+export SARIF_GEN_FOLDER_NAME="gen/$SARIF_FOLDER_NAME"
 
 function help_and_exit() {    
 cat <<'USAGE'
@@ -19,7 +27,7 @@ exit 1
 
 if [ -z "$SARIF_GENERATED_LIB_RELEASE_VERSION" ]
 then
-	help_and_exit
+	export SARIF_GENERATED_LIB_RELEASE_VERSION="1.8"
 fi
 
 if [ -z "$GEN_LIBRARY_JAVA_VERSION" ]
@@ -29,8 +37,8 @@ fi
 
 ../gradlew generateJsonSchema2Pojo
 
-./gen-build-gradle-file.sh
+./generate-build.gradle.sh
 
-cd gen/sarif-210
+cd "$SARIF_GEN_FOLDER_NAME"
 
 ../../../gradlew build sourcesJar
