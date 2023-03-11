@@ -1,6 +1,6 @@
 #!/bin/bash
-
 # SPDX-License-Identifier: MIT
+
 export SARIF_VERSION="2.1.0"
 # replace all . with _ :
 export SARIF_VERSION_WITH_UNDERSCORES="${SARIF_VERSION//./_}"
@@ -19,8 +19,8 @@ export SARIF_GENERATED_LIB_RELEASE_VERSION=<release-version>
 export GEN_LIBRARY_JAVA_VERSION=<gen-library-java-version>
 
 # Example:
-export SARIF_GENERATED_LIB_RELEASE_VERSION="0.1"
-export GEN_LIBRARY_JAVA_VERSION="11"
+export SARIF_GENERATED_LIB_RELEASE_VERSION="1.0.1"
+export GEN_LIBRARY_JAVA_VERSION="1.8"
 USAGE
 exit 1
 }
