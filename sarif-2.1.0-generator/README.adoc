@@ -1,4 +1,31 @@
 // SPDX-License-Identifier: MIT
 === Information
+
+==== Schema
 This subprojects uses the following schema to generate a java SARIF library:
 https://github.com/oasis-tcs/sarif-spec/blob/main/Schemata/sarif-schema-2.1.0.json
+
+==== Local development and testing 
+
+To create the artifacts for SARIF 2.1.0 just call inside this folder:
+
+```
+./full-build.sh
+```
+
+If you want to sign the artifacts locally (like automatically done on publishing) you can do following:
+
+```
+export SIGNING_KEy=$yourPGPKey
+export SIGNING_PASSWORD=$yourPGPPassword
+cd gen/sarif-2.1.0
+./../../../gradlew signMavenJavaPublication
+
+```
+
+If you want to test `publishing` locally, just enter:
+
+```
+./../../../gradlew publishToMavenLocal
+```
+
