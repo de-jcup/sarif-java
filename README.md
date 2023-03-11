@@ -46,8 +46,11 @@ For example:
 ### Usage
 The projects will use the library as a normal maven/gradle dependency:
 
-E.g. 
-`groupId:de.jcup.sarif artifactId:sarif version:2.1.0-1.0.1 type:jar`
+E.g. for `gradle`:
+
+```gradle
+implementation group: 'de.jcup.sarif.java', name: 'sarif-2.1.0', version: '1.0.1'
+```
 
 ## Build
 - We have no generated source checked into the repository!
