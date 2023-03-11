@@ -5,32 +5,40 @@ name: SARIF Release
 on:
   workflow_dispatch:
     inputs:
-      milestone-number:
-        description: Milestone number for release(s)
+      release-version:
+        description: Release version (e.g. 1.0.1)
         required: true
 jobs:
   release:
     env:
-      SARIF_GENERATED_LIB_RELEASE_VERSION: ${{github.event.inputs.milestone-number}}
+      SARIF_GENERATED_LIB_RELEASE_VERSION: ${{github.event.inputs.release-version}}
       GEN_LIBRARY_JAVA_VERSION: '1.8'
-      RELEASE_TAG: v${{ github.event.inputs.milestone-number }}
+      RELEASE_TAG: v${{ github.event.inputs.release-version }}
+      FORMER_RELEASE_TAG: v${{ github.event.inputs.release-version }}
       
     runs-on: ubuntu-latest
     environment: Release
-
+    
+    
     steps:
-    - name: "Information"
-      run: |
-       echo "Milestone '${{ github.event.inputs.milestone-number }}'"
-       echo "RELEASE_TAG '${{ env.RELEASE_TAG }}'"
-       echo "SARIF_GENERATED_LIB_RELEASE_VERSION '${{ env.SARIF_GENERATED_LIB_RELEASE_VERSION }}'"
-       echo "GEN_LIBRARY_JAVA_VERSION '${{ env.GEN_LIBRARY_JAVA_VERSION }}'"
       
     - uses: actions/checkout@v2
     - name: Set up JDK ${{env.GEN_LIBRARY_JAVA_VERSION}}
       uses: actions/setup-java@v1
       with:
         java-version: ${{env.GEN_LIBRARY_JAVA_VERSION}}
+
+    - name: "Fetch older release info"
+      run: |
+          FOUND_TAG=$(curl -sL https://api.github.com/repos/de-jcup/sarif-java/releases/latest | jq -r ".tag_name")
+          echo "FOUND_TAG=$FOUND_TAG"
+          echo "FORMER_RELEASE_TAG=$FOUND_TAG" >> $GITHUB_ENV
+    - name: "Information"
+      run: |
+       echo "RELEASE_TAG '${{ env.RELEASE_TAG }}'"
+       echo "FORMER_RELEASE_TAG '${{ env.FORMER_RELEASE_TAG }}'"
+       echo "SARIF_GENERATED_LIB_RELEASE_VERSION '${{ env.SARIF_GENERATED_LIB_RELEASE_VERSION }}'"
+       echo "GEN_LIBRARY_JAVA_VERSION '${{ env.GEN_LIBRARY_JAVA_VERSION }}'"
     
     - name: Build SARIF 2.1.0
       working-directory: ./sarif-2.1.0-generator
@@ -81,11 +89,10 @@ jobs:
           release_name: Version ${{ env.SARIF_GENERATED_LIB_RELEASE_VERSION }}
           body: |
             Changes in this version
-            - Some minor changes and bugfixes
+            - See all changes for https://github.com/de-jcup/sarif-java/compare/${{ env.FORMER_RELEASE_TAG }}...${{ env.RELEASE_TAG }}.
             
-            For more details please look at [Milestone ${{ github.event.inputs.milestone-number }}]( https://github.com/de-jcup/sarif-java/milestone/${{ github.event.inputs.milestone-number }}?closed=1)
-            
-            Created artifacts can be found at https://mvnrepository.com/artifact/de.jcup.sarif
+            Created artifacts can be found at 
+            - https://mvnrepository.com/artifact/de.jcup.sarif.java/sarif-2.1.0/${{ env.RELEASE_TAG }}
           draft: true
           prerelease: false
     
