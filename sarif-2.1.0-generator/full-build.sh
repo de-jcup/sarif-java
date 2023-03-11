@@ -5,8 +5,6 @@ export SARIF_VERSION="2.1.0"
 # replace all . with _ :
 export SARIF_VERSION_WITH_UNDERSCORES="${SARIF_VERSION//./_}"
 
-echo "SARIF_VERSION_WITH_UNDERSCORES=$SARIF_VERSION_WITH_UNDERSCORES"
-
 export SARIF_FOLDER_NAME="sarif-$SARIF_VERSION"
 export SARIF_GEN_FOLDER_NAME="gen/$SARIF_FOLDER_NAME"
 
@@ -27,12 +25,12 @@ exit 1
 
 if [ -z "$SARIF_GENERATED_LIB_RELEASE_VERSION" ]
 then
-	export SARIF_GENERATED_LIB_RELEASE_VERSION="1.8"
+	help_and_exit
 fi
 
 if [ -z "$GEN_LIBRARY_JAVA_VERSION" ]
 then
-	help_and_exit
+	export GEN_LIBRARY_JAVA_VERSION="1.8"
 fi
 
 ../gradlew generateJsonSchema2Pojo

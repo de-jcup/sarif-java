@@ -104,3 +104,4 @@ jsonSchema2Pojo {
   targetVersion = System.getenv("GEN_LIBRARY_JAVA_VERSION")
   
 }
+

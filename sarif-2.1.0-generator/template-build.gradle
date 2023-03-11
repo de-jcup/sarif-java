@@ -1,5 +1,6 @@
-// Use the java plugin 
+// SPDX-License-Identifier: MIT
 apply plugin: 'java'
+
 apply plugin: 'signing'
 apply plugin: 'maven-publish'
 
@@ -45,6 +46,9 @@ publishing {
 
   publications {
         mavenJava(MavenPublication) {
+        
+            from components.java
+        
             pom {
                 name = 'sarif-java'
                 description = 'A java library to read and write SARIF reports.'
