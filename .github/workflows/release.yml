@@ -1,0 +1,91 @@
+# This workflow will release to maven central with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: SARIF Release
+on:
+  workflow_dispatch:
+    inputs:
+      milestone-number:
+        description: Milestone number for release(s)
+        required: true
+jobs:
+  release:
+    env:
+      SARIF_GENERATED_LIB_RELEASE_VERSION: ${{github.event.inputs.milestone-number}}
+      GEN_LIBRARY_JAVA_VERSION: '1.8'
+      RELEASE_TAG: "v${{github.event.inputs.milestone-number}}"
+      
+    runs-on: ubuntu-latest
+    environment: Release
+
+    steps:
+    - name: "Information"
+      run: |
+       echo "Milestone '${{ github.event.inputs.milestone-number }}'"
+       echo "RELEASE_TAG '${{ env.RELEASE_TAG }}'"
+       echo "SARIF_GENERATED_LIB_RELEASE_VERSION '${{ env.SARIF_GENERATED_LIB_RELEASE_VERSION }}'"
+       echo "GEN_LIBRARY_JAVA_VERSION '${{ env.GEN_LIBRARY_JAVA_VERSION }}'"
+      
+    - uses: actions/checkout@v2
+    - name: Set up JDK ${{env.GEN_LIBRARY_JAVA_VERSION}}
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{env.GEN_LIBRARY_JAVA_VERSION}}
+    
+    - name: Build SARIF 2.1.0
+      working-directory: ./sarif-2.1.0-generator
+      run: ./full-build.sh
+      
+    # -----------------------------------------
+    # Upload Build Artifacts
+    # -----------------------------------------
+    - name: Archive distribution jar
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: sarif-2.1.0
+        path: sarif-2.1.0-generator/gen/sarif-2.1.0/build/libs/
+        retention-days: 14
+
+    # Now follow parts described at 
+    # https://docs.github.com/en/actions/publishing-packages/publishing-java-packages-with-gradle
+    # -----------------------------------------
+    # Gradle wrapper validation
+    # -----------------------------------------
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+    # -----------------------------------------
+    # Publish
+    # -----------------------------------------
+    - name: Publish SARIF 2.1.0
+      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+     
+      with:
+          arguments: build publish
+          build-root-directory: ./sarif-2.1.0-generator/gen/sarif-2.1.0
+          gradle-executable: ./gradlew
+      env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY}}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD}}
+      
+    - name: "Create release on GitHub"
+      id: "create_release"
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+          tag_name: "{{ env.RELEASE_TAG }}"
+          commitish: main
+          release_name: Version ${{ env.SARIF_GENERATED_LIB_RELEASE_VERSION }}
+          body: |
+            Changes in this version
+            - Some minor changes and bugfixes
+            
+            For more details please look at [Milestone ${{github.event.inputs.milestone-number}}]( https://github.com/de-jcup/sarif-java/milestone/${{github.event.inputs.milestone-number}}?closed=1)
+            
+            Created artifacts can be found at https://mvnrepository.com/artifact/de.jcup.sarif
+          draft: true
+          prerelease: false
+    
