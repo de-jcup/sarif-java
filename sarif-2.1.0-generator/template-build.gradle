@@ -26,10 +26,12 @@ java {
 
 
 java {
-//    withJavadocJar()
+    withJavadocJar()
     withSourcesJar()
 }
 
+// get rid of the most javadoc warnings
+javadoc.options.addStringOption('Xdoclint:none', '-quiet')
 
 publishing {
 
