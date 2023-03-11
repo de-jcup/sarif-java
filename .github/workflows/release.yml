@@ -13,7 +13,7 @@ jobs:
     env:
       SARIF_GENERATED_LIB_RELEASE_VERSION: ${{github.event.inputs.milestone-number}}
       GEN_LIBRARY_JAVA_VERSION: '1.8'
-      RELEASE_TAG: "v${{github.event.inputs.milestone-number}}"
+      RELEASE_TAG: v${{ github.event.inputs.milestone-number }}
       
     runs-on: ubuntu-latest
     environment: Release
@@ -70,20 +70,20 @@ jobs:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY}}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD}}
       
-    - name: "Create release on GitHub"
-      id: "create_release"
+    - name: Create (draft) release on GitHub
+      id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-          tag_name: "{{ env.RELEASE_TAG }}"
+          tag_name: ${{ env.RELEASE_TAG }}
           commitish: main
           release_name: Version ${{ env.SARIF_GENERATED_LIB_RELEASE_VERSION }}
           body: |
             Changes in this version
             - Some minor changes and bugfixes
             
-            For more details please look at [Milestone ${{github.event.inputs.milestone-number}}]( https://github.com/de-jcup/sarif-java/milestone/${{github.event.inputs.milestone-number}}?closed=1)
+            For more details please look at [Milestone ${{ github.event.inputs.milestone-number }}]( https://github.com/de-jcup/sarif-java/milestone/${{ github.event.inputs.milestone-number }}?closed=1)
             
             Created artifacts can be found at https://mvnrepository.com/artifact/de.jcup.sarif
           draft: true
