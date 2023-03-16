@@ -1737,7 +1737,6 @@
         },
         "level" : {
           "description" : "A value specifying the severity level of the result.",
-          "default" : "warning",
           "enum" : [ "none", "note", "warning", "error" ],
           "type" : "string"
         },
