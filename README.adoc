@@ -1,0 +1,136 @@
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+:toc:
+
+== About the project
+
+=== Purpose
+- A SARIF java library to read and write SARIF
+- Special logic for SARIF (e.g. when specified inside specification by pseudo code) shall be already implemented (ongoing process)
+- We will support different SARIF versions.
+
+=== License
+MIT-License
+
+
+=== Structure
+Here some information how we will support different SARIF versions inside this repository.
+
+[source,java]
+----
+github.com/de-jcup/sarif-java
+     /sarif-2.1.0-generator
+               build.gradle	     
+	    /gen
+                      /sarif-2.1.0 (generated gradle project)
+                       build.grade
+                      /src/main/java
+                      /src/test/java
+                /src/main/resources
+                        sarif.json
+	 /sarif-3.0-generator
+	    build.gradle
+	    /gen
+----
+
+=== Versioning
+
+==== Libary version
+We will have the library version containing the SARIF version and our semantic version contained inside:
+
+`${sarif_version}-${ourMajor}.${ourMinor}.${ourHotfix}`.
+
+So as an example: For sarif 2.1.0 in the first hotfix release of our library we will have library name: `2.1.0-1.0.1`.
+If there are minor changes for this library necessary it will be `2.1.0-1.1.0`.
+If there are major (breaking) changes for the next library, it will be `2.1.0-2.0.0`. 
+If the next release is only a bug fix release, we will have `2.1.0-2.0.1`.
+
+==== Package names
+The package names do contain the SARIF version inside so easy to differentiate
+    
+For example:
+```	
+	de.jcup.sarif_2_1_0.*
+	de.jcup.sarif_3_0_0.* 
+```
+		
+=== Usage
+The projects will use the library as a normal maven/gradle dependency.
+You will find them at https://mvnrepository.com/artifact/de.jcup.sarif.java
+
+==== Sarif 2.1.0
+
+
+Example 1: Add the dependency to a gradle project
+
+[source,gradle]
+----
+implementation group: 'de.jcup.sarif.java', name: 'sarif-2.1.0', version: '1.1.0'
+----
+
+===== Example 1
+Load a SARIF 2.1.0 report from file
+
+[source,java]
+----
+SarifSchema210ImportExportSupport importExport = new SarifSchema210ImportExportSupport();
+SarifSchema210 sarifReport = importExport.fromFile(new File("./src/main/resources/sarif_2_1_0_example.json"));
+----
+
+===== Example 2
+Create a SARIF report
+
+[source,java]
+----
+ SarifSchema210 sarif = new SarifSchema210();
+ Run run1 = new Run();
+ Tool tool1 = new Tool();
+ ToolComponent driver = new ToolComponent();
+
+ String driverGuid = "1234-guid-test-tool-driver-id";
+
+ driver.setGuid(driverGuid);
+ driver.setFullName("Only-Test");
+
+ tool1.setDriver(driver);
+ run1.setTool(tool1);
+ sarif.getRuns().add(run1);
+----
+
+===== Example 3
+Fetch the resulting level for a result inside a run.
+
+[source,java]
+----
+ SarifSchema210LogicSupport logicSupport = new SarifSchema210LogicSupport();
+ SarifSchema210 sarifReport = createOrReadReportFromFile(); // ... must be implemented...
+ 
+ Run run = sarifReport.getRuns().iterator().next();
+ List<Result> results = run.getResults();
+  
+ Iterator<Result> it = results.iterator();
+ Result result1 = it.next();
+
+ Level level1 = logicSupport.resolveLevel(result1, run1); //<1>
+----
+<1> This method call will handle automatically the override mechanism between a rule and a result level. +
+    It contains an implementation of the pseudo code defined in specification at https://docs.oasis-open.org/sarif/sarif/v2.1.0/os/sarif-v2.1.0-os.html#_Toc34317648
+
+===== More examples
+
+You can find more examples inside unit tests at  +
+https://github.com/de-jcup/sarif-java/tree/main/sarif-2.1.0-generator/impl/sarif-2.1.0/src/test/java/de/jcup/sarif_2_1_0
+
+
+== Build
+- We have no generated source checked into the repository!
+- To build the complete library we have a `full-build.sh` script. This will generate sources, a custom gradle build file and build the 
+  library parts afterwards.
+
+== Release
+- At release time we use an GitHub actions workflow which starts the build script and will upload to maven central by using the relase version tag.
