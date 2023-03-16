@@ -1,0 +1,10 @@
+{
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "guid" : "1234-guid-test-tool-driver-id",
+        "fullName" : "Only-Test"
+      }
+    }
+  } ]
+}

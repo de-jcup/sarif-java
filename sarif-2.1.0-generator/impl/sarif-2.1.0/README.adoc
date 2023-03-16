@@ -1,0 +1,48 @@
+== About this folder
+
+Beside the generated java classes we provide some additional classes - 
+to make it easier to use the library and also to handle some of the
+special logic necessary for SARIF.
+
+Also some tests are settled here.
+
+=== Build time
+After generation the content of `src` folder is copied to
+the generation target folder.
+
+After this, the final build will be started.
+
+Means: The tests will be executed 
+and the release is only possible
+when these tests do not fail.
+
+=== Development time
+If you want to enhance the unit tests or to change code inside the
+support classes you can change the code inside your IDE.
+
+But unfortunately you will have no code completion because the IDE does 
+not know that these files are part of a build.
+
+[TIP]
+====
+Here some workarounds to have code completion:
+
+*Variant 1:*
+
+As a workaround, copy the source folder `src` to a temporary
+gradle project and define  the library as a dependency.
+
+When you have finished, copy the
+changed files back to the impl/src
+folder.
+
+*Variant 2:*
+
+Or you create a local project in your IDE (with junit5 and jackson 
+as dependencies) and link the generated sources 
+(gen/src) and also the impl source folder as source folders (make sure
+impl is on top of classpath so it overrides gen parts).
+Here you need no copying of file
+
+====
+ 

@@ -1,9 +1,9 @@
 #!/bin/bash
 # SPDX-License-Identifier: MIT
 
-if [ ! -d "$SARIF_GEN_FOLDER_NAME" ]
+if [ ! -d "$SARIF_GEN_FOLDER" ]
 then
-	mkdir -p "$SARIF_GEN_FOLDER_NAME"
+	mkdir -p "$SARIF_GEN_FOLDER"
 fi
 
 # read the template file, replace content with environment variables
@@ -11,4 +11,4 @@ fi
 eval "cat <<EOF
 $(<template-build.gradle)
 EOF
-" > $SARIF_GEN_FOLDER_NAME/build.gradle
+" > $SARIF_GEN_FOLDER/build.gradle

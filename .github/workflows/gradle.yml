@@ -24,11 +24,18 @@ jobs:
     
     - name: Build SARIF 2.1.0
       working-directory: ./sarif-2.1.0-generator
-      run: ./full-build.sh
+      run: ./full-build.sh --clean
       
     # -----------------------------------------
     # Upload Build Artifacts
     # -----------------------------------------
+    - name: Archive test results
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results-sarif-2.1.0
+        path: sarif-2.1.0-generator/gen/sarif-2.1.0/build/reports/tests
+        retention-days: 14
     - name: Archive distribution jar
       if: always()
       uses: actions/upload-artifact@v2

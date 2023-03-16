@@ -1,0 +1,116 @@
+{
+  "runs" : [ {
+    "tool" : {
+      "driver" : {
+        "guid" : "1234-guid-test-tool-driver-id",
+        "fullName" : "Only-Test",
+        "rules" : [ {
+          "id" : "rule-1",
+          "guid" : "12346-rule-1",
+          "shortDescription" : {
+            "text" : "short-description of rule-1"
+          },
+          "fullDescription" : {
+            "text" : "full-description of rule-1"
+          },
+          "defaultConfiguration" : {
+            "level" : "note"
+          }
+        }, {
+          "id" : "rule-2",
+          "guid" : "12346-rule-2",
+          "shortDescription" : {
+            "text" : "short-description of rule-2"
+          },
+          "fullDescription" : {
+            "text" : "full-description of rule-2"
+          },
+          "defaultConfiguration" : {
+            "level" : "none"
+          }
+        }, {
+          "id" : "rule-3",
+          "guid" : "12346-rule-3",
+          "shortDescription" : {
+            "text" : "short-description of rule-3"
+          },
+          "fullDescription" : {
+            "text" : "full-description of rule-3"
+          },
+          "defaultConfiguration" : {
+            "level" : null
+          }
+        }, {
+          "id" : "rule-4",
+          "guid" : "12346-rule-4",
+          "shortDescription" : {
+            "text" : "short-description of rule-4"
+          },
+          "fullDescription" : {
+            "text" : "full-description of rule-4"
+          }
+        }, {
+          "id" : "rule-5",
+          "guid" : "12346-rule-5",
+          "shortDescription" : {
+            "text" : "short-description of rule-5"
+          },
+          "fullDescription" : {
+            "text" : "full-description of rule-5"
+          }
+        } ]
+      }
+    },
+    "results" : [ {
+      "ruleId" : "rule-1",
+      "rule" : {
+        "guid" : "rule-1",
+        "toolComponent" : {
+          "guid" : "1234-guid-test-tool-driver-id"
+        }
+      },
+      "level" : null,
+      "guid" : "12354-guid-result-1"
+    }, {
+      "ruleId" : "rule-2",
+      "rule" : {
+        "guid" : "rule-2",
+        "toolComponent" : {
+          "guid" : "1234-guid-test-tool-driver-id"
+        }
+      },
+      "level" : "error",
+      "guid" : "12354-guid-result-1"
+    }, {
+      "ruleId" : "rule-3",
+      "rule" : {
+        "guid" : "rule-3",
+        "toolComponent" : {
+          "guid" : "1234-guid-test-tool-driver-id"
+        }
+      },
+      "level" : null,
+      "guid" : "12354-guid-result-1"
+    }, {
+      "ruleId" : "rule-4",
+      "rule" : {
+        "guid" : "rule-4",
+        "toolComponent" : {
+          "guid" : "1234-guid-test-tool-driver-id"
+        }
+      },
+      "level" : null,
+      "guid" : "12354-guid-result-1"
+    }, {
+      "ruleId" : "rule-5",
+      "rule" : {
+        "guid" : "rule-5",
+        "toolComponent" : {
+          "guid" : "1234-guid-test-tool-driver-id"
+        }
+      },
+      "level" : "note",
+      "guid" : "12354-guid-result-1"
+    } ]
+  } ]
+}
