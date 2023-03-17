@@ -7,7 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,20 +24,52 @@ import de.jcup.sarif_2_1_0.model.SarifSchema210;
 class SarifSchema210LogicTest {
 
     private SarifSchema210LogicSupport supportToTest;
-    private static SarifSchema210ImportExportSupport readWriteSupport;
+    private TestFileData testData;
+    private static SarifSchema210ImportExportSupport importExportSupport;
     private static SarifSchema210TestReportFactory testSchemaFactory;
 
     @BeforeAll
     static void beforeAll() {
         testSchemaFactory = new SarifSchema210TestReportFactory();
-        readWriteSupport = new SarifSchema210ImportExportSupport();
+        importExportSupport = new SarifSchema210ImportExportSupport();
 
     }
 
     @BeforeEach
     void beforeEach() {
         supportToTest = new SarifSchema210LogicSupport();
+        testData = new TestFileData();
+    }
 
+    @Test
+    void brakeman_sarif_example_with_tags__tags_can_be_fetched() throws IOException {
+        /* prepare */
+        File codeFlowSarifSchema210File = new File(testData.sarifBrakemanFolder,
+                "sarif_2_1_0__brakeman_testfile_with_tags.sarif.json");
+
+        /* execute - 1 */
+        SarifSchema210 SarifSchema210 = importExportSupport.fromFile(codeFlowSarifSchema210File);
+
+        /* test 1- check it can be loaded */
+        List<Run> runs = SarifSchema210.getRuns();
+        assertEquals(1, runs.size(), "there must be ONE run!");
+        Run run = runs.iterator().next();
+        List<Result> results = run.getResults();
+        assertEquals(32, results.size(), "there must be 32 results!");
+        Result result = results.iterator().next();
+
+        /* execute - 2 */
+        ReportingDescriptor rule = supportToTest.fetchRuleForResult(result, run);
+
+        /* test 2 : here we test the logic! */
+        Set<String> tags = rule.getProperties().getTags();
+        assertNotNull(tags);
+
+        Set<String> expected = new LinkedHashSet<>();
+        expected.add("ContentTag");
+        expected.add("Tag2");
+        expected.add("Tag3");
+        assertEquals(expected, tags);
     }
 
     @Test
@@ -89,8 +123,9 @@ class SarifSchema210LogicTest {
 
     @Test
     void resolveLevel_when_levels_are_explicit_null_set_from_file() throws IOException {
+
         /* prepare */
-        SarifSchema210 sarif = readWriteSupport.fromFile(new File("./src/test/resources/sarif_2_1_0_testfile1.json"));
+        SarifSchema210 sarif = importExportSupport.fromFile(testData.sarif_2_1_0_testfile1);
 
         /* test */
         commonLevelCheck(sarif);
@@ -111,8 +146,7 @@ class SarifSchema210LogicTest {
     @Test
     void resolveLevel_when_levels_are_NOT_explicit_null_set_from_file() throws IOException {
         /* prepare */
-        SarifSchema210 sarif = readWriteSupport
-                .fromFile(new File("./src/test/resources/sarif_2_1_0_testfile2_no_explicit_level_null_set.json"));
+        SarifSchema210 sarif = importExportSupport.fromFile(testData.sarif_2_1_0_testfile2_no_explicit_level_null_set);
 
         /* test */
         commonLevelCheck(sarif);

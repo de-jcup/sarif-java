@@ -5,12 +5,12 @@ import de.jcup.sarif_2_1_0.model.ReportingConfiguration;
 import de.jcup.sarif_2_1_0.model.ReportingDescriptor;
 import de.jcup.sarif_2_1_0.model.ReportingDescriptorReference;
 import de.jcup.sarif_2_1_0.model.Result;
+import de.jcup.sarif_2_1_0.model.Result.Level;
 import de.jcup.sarif_2_1_0.model.Run;
 import de.jcup.sarif_2_1_0.model.SarifSchema210;
 import de.jcup.sarif_2_1_0.model.Tool;
 import de.jcup.sarif_2_1_0.model.ToolComponent;
 import de.jcup.sarif_2_1_0.model.ToolComponentReference;
-import de.jcup.sarif_2_1_0.model.Result.Level;
 
 public class SarifSchema210TestReportFactory {
 
@@ -35,7 +35,8 @@ public class SarifSchema210TestReportFactory {
      * error
      * <li>result3</li>with level: null --> so rule3 default, but still null, so
      * SARIF default must be applied: warning
-     * <li>result4</li>with level: null --> no default rule, so SARIF default applied: warning
+     * <li>result4</li>with level: null --> no default rule, so SARIF default
+     * applied: warning
      * <li>result5</li>with level: note --> no default rule: note
      * </ol>
      *
@@ -56,10 +57,10 @@ public class SarifSchema210TestReportFactory {
         run1.setTool(tool1);
         sarif.getRuns().add(run1);
 
-        String rule1Id = createRuleWithDefaultLevel(driver,
-                de.jcup.sarif_2_1_0.model.ReportingConfiguration.Level.NOTE, "rule-1", true);
-        String rule2Id = createRuleWithDefaultLevel(driver,
-                de.jcup.sarif_2_1_0.model.ReportingConfiguration.Level.NONE, "rule-2", true);
+        String rule1Id = createRuleWithDefaultLevel(driver, de.jcup.sarif_2_1_0.model.ReportingConfiguration.Level.NOTE,
+                "rule-1", true);
+        String rule2Id = createRuleWithDefaultLevel(driver, de.jcup.sarif_2_1_0.model.ReportingConfiguration.Level.NONE,
+                "rule-2", true);
         String rule3Id = createRuleWithDefaultLevel(driver, null, "rule-3", true);
         String rule4Id = createRuleWithDefaultLevel(driver, null, "rule-4", false);
         String rule5Id = createRuleWithDefaultLevel(driver, null, "rule-5", false);
@@ -112,7 +113,7 @@ public class SarifSchema210TestReportFactory {
             ReportingConfiguration defaultConfiguration = new ReportingConfiguration();
             rule.setDefaultConfiguration(defaultConfiguration);
             rule.getDefaultConfiguration().setLevel(level);
-            
+
         }
         driver.getRules().add(rule);
         return ruleId;
