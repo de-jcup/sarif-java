@@ -1,0 +1,14 @@
+== README
+This folder contains the 
+origin SARIF schema file.
+
+There were some needs for the
+generation.
+
+You find the customized schema
+in the child folder `customized`.
+
+This child folder is used for generation.
+
+TIP: You can compare the two files with your 
+IDE to see the changes.

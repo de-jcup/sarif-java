@@ -6,7 +6,7 @@ apply plugin: 'java'
 apply plugin: 'jsonschema2pojo'
 
 ext.sarif_version_with_underscores=System.getenv("SARIF_VERSION_WITH_UNDERSCORES")
-ext.sarif_gen_folder_name=System.getenv("SARIF_GEN_FOLDER_NAME")
+ext.sarif_gen_folder=System.getenv("SARIF_GEN_FOLDER")
 
 buildscript {
 
@@ -35,11 +35,11 @@ dependencies {
 jsonSchema2Pojo {
 
   // Location of the JSON Schema file(s). This may refer to a single file or a directory of files.
-  source = files("src/main/resources/sarif-json-schema")
+  source = files("src/main/resources/sarif-json-schema/customized")
 
   // Target directory for generated Java source files. The plugin will add this directory to the
   // java source set so the compiler will find and compile the newly generated source files.
-  targetDirectory = file("${sarif_gen_folder_name}/src/main/java")
+  targetDirectory = file("${sarif_gen_folder}/src/main/java")
 
   // Package name used for generated Java classes (for types where a fully qualified name has not
   // been supplied in the schema using the 'javaType' property).

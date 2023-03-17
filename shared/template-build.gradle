@@ -17,6 +17,11 @@ repositories {
 
 dependencies {
   implementation library.jackson_databind
+  
+  // we add this, to be able to add junit tests for our own ipmlementations
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+  testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 java {
@@ -28,6 +33,11 @@ java {
 java {
     withJavadocJar()
     withSourcesJar()
+}
+
+// we need this to execute tests for copied parts from 'impl/src' folder!
+test {
+    useJUnitPlatform()
 }
 
 // get rid of the most javadoc warnings

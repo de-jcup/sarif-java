@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       release-version:
-        description: Release version (e.g. 1.0.1)
+        description: Release version (e.g. 1.1.0)
         required: true
 jobs:
   release:
@@ -42,7 +42,7 @@ jobs:
     
     - name: Build SARIF 2.1.0
       working-directory: ./sarif-2.1.0-generator
-      run: ./full-build.sh
+      run: ./full-build.sh --clean
       
     # -----------------------------------------
     # Upload Build Artifacts
